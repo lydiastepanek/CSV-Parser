@@ -1,10 +1,12 @@
 from sys import argv
 import csv
 
-script, inputFilename, inputDelim, inputQuote = argv
-# python csv_parser.py lydia
+script, infile, inputDelim, inputQuote = argv
+# python csv_parser.py randomjs.js ' ' '|'
+# python csv_parser.py '/Users/lydiastepanek/Desktop/randomjs.js' ' ' '|'
 
-target = open(inputFilename + "_output.txt", 'w')
+# target = open(infile + "_output.txt", 'w')
+target = open(infile + "_out.txt", 'w')
 lineCt = 0
 # txt = open(filename)
 #
@@ -22,13 +24,14 @@ lineCt = 0
 #         target.write(line)
 #         target.write("\n")
 #
-with open(inputFilename, 'rb') as csvfile:
-     spamreader = csv.reader(csvfile, delimiter=inputDelim, quotechar=inputQuote)
+with open(infile, 'rb') as csvfile:
+     spamreader = csv.reader(csvfile, delimiter=inputDelim, quotechar=inputQuote, skipinitialspace=True)
     #  spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
      for row in spamreader:
          lineCt += 1
-         print inputDelim.join(row)
-         target.write(inputDelim.join(row))
+         for item in row:
+             item = item.strip()
+         target.write('|'.join(row))
 
-print "Line count: %d" % rowCt
+print "Line count: %d" % lineCt
 target.close()
