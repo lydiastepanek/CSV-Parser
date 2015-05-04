@@ -14,10 +14,19 @@ Simple csv parser to trim spaces on a csv file.
 
 * Download csv_parser.py
 * Run with input filename
-* For example: python csv_parser.py 'test.csv'
 * Can pass two optional extra arguments for field delimiter, and text qualifier
 * Command prompt will ask for delimiter and text qualifier, will default to tab delimited and " if none given
 
+## Examples
+
+* With no arguments
+  * python csv-parser3.py
+* With some arguments
+  * python csv-parser3.py -infile '/Users/lydiastepanek/Desktop/randomjs.js'
+* With all arguments
+  * python csv-parser3.py -infile '/Users/lydiastepanek/Desktop/randomjs.js' -delim ',' -tq '|'
+
 ## To Do
 
-* Add python library capability
+* Allow '\t' and other escaped characters as delimiter
+* Make python library

@@ -1,44 +1,48 @@
 from sys import argv
 import csv
 import argparse
+import os
+import ast
 
 parser = argparse.ArgumentParser()
-parser.add_argument('strings', metavar='N', type=str, nargs='+')
-
+parser.add_argument("-infile", type=str,
+                    help="gives input file")
+parser.add_argument("-delim", type=str,
+                    help="field delimiter")
+parser.add_argument("-tq", type=str,
+                    help="text qualifier")
 args = parser.parse_args()
 
-if len(args.strings) > 0:
-    infile = args.strings[0]
-else:
+if not args.infile:
     print "What file would you like to use?"
-    infile = raw_input("> ")
+    args.infile = raw_input("> ")
 
-if len(args.strings) > 1:
-    inputDelim = args.strings[1]
-else:
+if not args.delim:
     print "What field delimiter would you like to use? i.e. for space type ' '. Default is tab delimiter."
-    inputDelim = raw_input("> ")
-    if len(inputDelim) == 0:
-        inputDelim = '\t'
+    args.delim = raw_input("> ")
+    if len(args.delim) == 0:
+        args.delim = '\t'
+    # elif len(args.delim) > 1:
+    #     args.delim = repr(args.delim)
+        # print ast.literal_eval(raw_input())
 
-if len(args.strings) > 2:
-    inputQuote = args.strings[2]
-else:
+if not args.tq:
     print "What text qualifier would you like to use? i.e. for vertical bar type '|'. Default is double quote."
-    inputQuote = raw_input("> ")
-    if len(inputQuote) == 0:
-        inputQuote = '"'
+    args.tq = raw_input("> ")
+    if len(args.tq) == 0:
+        args.tq = '"'
 
-target = open(infile + "_out.txt", 'w')
+outfile = os.path.splitext(args.infile)[0] + "_out.txt"
+target = open(outfile, 'w')
 lineCt = 0
 
-with open(infile, 'rb') as csvfile:
-     spamreader = csv.reader(csvfile, delimiter=inputDelim, quotechar=inputQuote, skipinitialspace=True)
+with open(args.infile, 'rb') as csvfile:
+     spamreader = csv.reader(csvfile, delimiter=args.delim, quotechar=args.tq, skipinitialspace=True)
      for row in spamreader:
          lineCt += 1
          for item in row:
              item = item.strip()
-         target.write('|'.join(row))
+         target.write(args.delim.join(row))
 
-print "%r line count: %d" % (infile, lineCt)
+print "File %r trim spaces complete. Line count: %d" % (args.infile, lineCt)
 target.close()
